@@ -22,6 +22,24 @@ const userPool = new cognito.UserPool(this, 'UserPool', {
   userPoolName: 'BookTrackingAppUserPool',
 });
 
+//Lambda Function for Adding a Book
+const addBookFunction = new lambda.Function(this, 'AddBookFunction', {
+  runtime: lambda.Runtime.NODEJS_18_X,
+  handler: 'addBook.handler',
+  code: lambda.Code.fromAsset('lambda'),
+  environment: {
+    TABLE_NAME: userDataTable.tableName,
+  }
+});
+
+const addBookFunction = new lambda.Function(this, 'GetRecommendationsFunction', {
+  runtime: lambda.Runtime.NODEJS_18_X,
+  handler: 'getRecommendations.handler',
+  code: lambda.Code.fromAsset('lambda'),
+  environment: {
+    TABLE_NAME: userDataTable.tableName,
+  }
+});
 
   }
 }
