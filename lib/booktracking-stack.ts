@@ -56,5 +56,33 @@ userDataTable.grantReadWriteData(addBookFunction);
 userDataTable.grantReadWriteData(getReccomendationsFunction);
 loanedBooksTable.grantReadWriteData(addBookFunction);
 
+
+// //Amplify for Frontend Hosting (optional)
+// const amplifyApp = new amplify.CfnApp(this, 'BookTrackingFrontend', {
+//   sourceCodeProvider: new amplify.GitHubSourceCodeProvider({
+//     owner: 'kowens32',
+//     repository: 'example',
+//     oauthToken: cdk.SecretValue.secretsManager('github-token'),
+//   }),
+// });
+
+//Cloudwatch for Monitoring 
+const addBookFunctionErrors = new cloudwatch.Metric({
+  namespace: 'AWS/Lambda',
+  metricName: 'Errors',
+  dimensionsMap: {
+    FunctionName: addBookFunction.functionName,
+  },
+  statistic: 'sum',
+});
+
+const alarm = new cloudwatch.Alarm(this, 'AddBookErrorsAlarm', {
+  metric: addBookFunctionErrors,
+  threshold: 1, 
+  evaluationPeriods: 1,
+});
+  
   }
 }
+
+
