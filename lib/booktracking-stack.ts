@@ -12,14 +12,16 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class BooktrackingStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+// Cognitio User Pool for Authentication 
+const userPool = new cognito.UserPool(this, 'UserPool', {
+  selfSignUpEnabled: true,
+  signInAliases: {email: true},
+  userPoolName: 'BookTrackingAppUserPool',
+});
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'BooktrackingQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+
   }
 }
