@@ -32,7 +32,7 @@ const addBookFunction = new lambda.Function(this, 'AddBookFunction', {
   }
 });
 
-const addBookFunction = new lambda.Function(this, 'GetRecommendationsFunction', {
+const getReccomendationsFunction = new lambda.Function(this, 'GetRecommendationsFunction', {
   runtime: lambda.Runtime.NODEJS_18_X,
   handler: 'getRecommendations.handler',
   code: lambda.Code.fromAsset('lambda'),
@@ -40,6 +40,21 @@ const addBookFunction = new lambda.Function(this, 'GetRecommendationsFunction', 
     TABLE_NAME: userDataTable.tableName,
   }
 });
+
+//APIGW to expose the lambda functions 
+const api = new apigateway.RestApi(this, 'BookTrackingApi', {
+  restApiName: 'Book Traclomg Service', 
+  description: 'This service manages book tracking for users.',
+});
+
+const books = api.root.addResource('books');
+books.addMethod('Post', new apigateway.LambdaIntegration(addBookFunction));
+books.addMethod('GET', new apigateway.LambdaIntegration(getReccomendationsFunction));
+
+// Grant necessary permissions
+userDataTable.grantReadWriteData(addBookFunction);
+userDataTable.grantReadWriteData(getReccomendationsFunction);
+loanedBooksTable.grantReadWriteData(addBookFunction);
 
   }
 }
