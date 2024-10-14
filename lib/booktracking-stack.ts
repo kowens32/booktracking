@@ -6,6 +6,8 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
 import { BillingMode } from 'aws-cdk-lib/aws-dynamodb';
 import { PartitionKey } from 'aws-cdk-lib/aws-appsync';
+import { DynamoDbDataSource } from 'aws-cdk-lib/aws-appsync';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -30,7 +32,7 @@ const userDataTable = new dynamodb.Table(this, 'UserDataTable', {
 });
 
 // Define DynamoDB table for loaned books 
-const loanedBooksTable = new DynamoDbDataSource.Table(this, 'LoanedBooksTable' {
+const loanedBooksTable = new DynamoDbDataSource.Table(this, 'LoanedBooksTable', {
     partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
     sortKey: { name: 'loandedBookId', type: dynamodb.AttributeType.STRING }, 
     billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
